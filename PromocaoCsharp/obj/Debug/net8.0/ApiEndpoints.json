@@ -1,0 +1,48 @@
+[
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
+    "Method": "createProduct",
+    "RelativePath": "api/Produto/new",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novoProdutoDTO",
+        "Type": "PromocaoCsharp.DTO.ProdutoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.Models.Produto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
+    "Method": "getProducts",
+    "RelativePath": "api/Produto/view",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.Models.Produto, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
