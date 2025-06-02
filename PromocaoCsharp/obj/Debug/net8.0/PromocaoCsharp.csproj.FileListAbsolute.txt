@@ -226,3 +226,4 @@ C:\Users\Vinicius\source\repos\projetoPromocaoCsharp2\PromocaoCsharp\obj\Debug\n
 C:\Users\Vinicius\source\repos\projetoPromocaoCsharp2\PromocaoCsharp\obj\Debug\net8.0\PromocaoCsharp.pdb
 C:\Users\Vinicius\source\repos\projetoPromocaoCsharp2\PromocaoCsharp\obj\Debug\net8.0\PromocaoCsharp.genruntimeconfig.cache
 C:\Users\Vinicius\source\repos\projetoPromocaoCsharp2\PromocaoCsharp\obj\Debug\net8.0\ref\PromocaoCsharp.dll
+C:\Users\Vinicius\source\repos\projetoPromocaoCsharp2\PromocaoCsharp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

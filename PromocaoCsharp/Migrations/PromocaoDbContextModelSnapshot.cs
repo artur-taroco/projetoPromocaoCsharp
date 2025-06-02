@@ -80,7 +80,7 @@ namespace PromocaoCsharp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promocao");
+                    b.ToTable("Promocoes");
                 });
 
             modelBuilder.Entity("ProdutoPromocao", b =>

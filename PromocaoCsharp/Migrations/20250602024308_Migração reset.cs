@@ -7,13 +7,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PromocaoCsharp.Migrations
 {
     /// <inheritdoc />
-    public partial class addPromocao : Migration
+    public partial class Migraçãoreset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
-                name: "Promocao",
+                name: "Produtos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_general_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nome = table.Column<string>(type: "longtext", nullable: false, collation: "utf8mb4_general_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descricao = table.Column<string>(type: "longtext", nullable: false, collation: "utf8mb4_general_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Preco = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("Relational:Collation", "utf8mb4_general_ci");
+
+            migrationBuilder.CreateTable(
+                name: "Promocoes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -24,7 +46,7 @@ namespace PromocaoCsharp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Promocao", x => x.Id);
+                    table.PrimaryKey("PK_Promocoes", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
@@ -47,9 +69,9 @@ namespace PromocaoCsharp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutoPromocao_Promocao_PromocoesId",
+                        name: "FK_ProdutoPromocao_Promocoes_PromocoesId",
                         column: x => x.PromocoesId,
-                        principalTable: "Promocao",
+                        principalTable: "Promocoes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -69,7 +91,10 @@ namespace PromocaoCsharp.Migrations
                 name: "ProdutoPromocao");
 
             migrationBuilder.DropTable(
-                name: "Promocao");
+                name: "Produtos");
+
+            migrationBuilder.DropTable(
+                name: "Promocoes");
         }
     }
 }

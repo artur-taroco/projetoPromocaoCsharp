@@ -11,5 +11,15 @@ namespace PromocaoCsharp.Models
         public DateTime DataInicio { get; set; }
         public DateTime DataFim { get; set; }
         public List<Produto> Produtos { get; set; } = new List<Produto>();
+
+        public Promocao(decimal percentualDesconto, DateTime dataInicio, DateTime dataFim, List<Produto> produtos)
+        {
+            PercentualDesconto = percentualDesconto;
+            DataInicio = dataInicio;
+            DataFim = dataFim;
+            Produtos = produtos;
+        }
+
+        private Promocao() { }
     }
 }

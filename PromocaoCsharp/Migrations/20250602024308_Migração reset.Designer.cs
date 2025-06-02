@@ -12,8 +12,8 @@ using PromocaoCsharp.Models;
 namespace PromocaoCsharp.Migrations
 {
     [DbContext(typeof(PromocaoDbContext))]
-    [Migration("20250521005716_addPromocao")]
-    partial class addPromocao
+    [Migration("20250602024308_Migração reset")]
+    partial class Migraçãoreset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,7 +83,7 @@ namespace PromocaoCsharp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promocao");
+                    b.ToTable("Promocoes");
                 });
 
             modelBuilder.Entity("ProdutoPromocao", b =>

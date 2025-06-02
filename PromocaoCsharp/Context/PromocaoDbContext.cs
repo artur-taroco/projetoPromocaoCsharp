@@ -9,6 +9,7 @@ namespace PromocaoCsharp.Models;
 public partial class PromocaoDbContext : DbContext
 {
     public DbSet<Produto> Produtos { get; set; }
+    public DbSet<Promocao> Promocoes { get; set; }
 
 
     public PromocaoDbContext()
