@@ -18,10 +18,11 @@ namespace PromocaoCsharp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Promocao>> GetAll()
+        public ActionResult<IEnumerable<Promocao>> GetPromotions()
         {
-            List<Promocao> promocoes = dbContext.Promocoes.Include(p => p.Produtos).ToList();
-            List<PromocaoResponseDTO> resposta = new List<PromocaoResponseDTO>();
+            List<Promocao> promocoes = dbContext.Promocoes.Include(p => p.Produtos).ToList(); // visualiza as promoções com GET
+
+            List<PromocaoResponseDTO> resposta = new List<PromocaoResponseDTO>(); // Cria um DTO para inserir o DTO de produtos, impedindo a ref. ciclica
 
             foreach (Promocao promocao in promocoes)
             {
@@ -29,24 +30,12 @@ namespace PromocaoCsharp.Controllers
 
                 foreach (Produto produto in promocao.Produtos)
                 {
-                    ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO
-                    {
-                        Id = produto.Id,
-                        Nome = produto.Nome,
-                        Preco = produto.Preco
-                    };
+                    ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO(produto.Id, produto.Nome, produto.Preco);
 
                     produtosNaPromocao.Add(produtoDTO);
                 }
 
-                PromocaoResponseDTO promocaoDTO = new PromocaoResponseDTO
-                {
-                    Id = promocao.Id,
-                    PercentualDesconto = promocao.PercentualDesconto,
-                    DataInicio = promocao.DataInicio,
-                    DataFim = promocao.DataFim,
-                    Produtos = produtosNaPromocao
-                };
+                PromocaoResponseDTO promocaoDTO = new PromocaoResponseDTO(promocao.Id, promocao.PercentualDesconto, promocao.DataInicio, promocao.DataFim, produtosNaPromocao);
 
                 resposta.Add(promocaoDTO);
             }
@@ -68,27 +57,13 @@ namespace PromocaoCsharp.Controllers
 
             foreach (Produto produto in produtos)
             {
-                ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO
-                {
-                    Id = produto.Id,
-                    Nome = produto.Nome,
-                    Preco = produto.Preco
-                };
+                ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO(produto.Id, produto.Nome, produto.Preco);
 
                 produtosDTO.Add(produtoDTO);
             }
 
-            PromocaoResponseDTO resposta = new PromocaoResponseDTO
-
-            {
-                Id = novaPromocao.Id,
-                PercentualDesconto = novaPromocao.PercentualDesconto,
-                DataInicio = novaPromocao.DataInicio,
-                DataFim = novaPromocao.DataFim,
-                Produtos = produtosDTO
-            };
-
-
+            PromocaoResponseDTO resposta = new PromocaoResponseDTO(novaPromocao.Id, novaPromocao.PercentualDesconto, novaPromocao.DataInicio, novaPromocao.DataFim, produtosDTO);
+            
             return CreatedAtAction(nameof(CreatePromotion), resposta);
         }
     }

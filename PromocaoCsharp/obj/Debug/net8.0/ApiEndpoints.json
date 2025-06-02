@@ -113,7 +113,7 @@
   },
   {
     "ContainingType": "PromocaoCsharp.Controllers.PromocaoController",
-    "Method": "GetAll",
+    "Method": "GetPromotions",
     "RelativePath": "api/Promocao",
     "HttpMethod": "GET",
     "IsController": true,
