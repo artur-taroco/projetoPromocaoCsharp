@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PromocaoCsharp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ad06b991780d8aa6d3d985d41ec3a488adb2ed6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30715aca71833943439e4aa98aeb40c88ffa9422")]
 [assembly: System.Reflection.AssemblyProductAttribute("PromocaoCsharp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PromocaoCsharp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
