@@ -1,12 +1,143 @@
 [
   {
+    "ContainingType": "PromocaoCsharp.Controllers.CategoriaController",
+    "Method": "GetCategories",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "inativas",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.DTO.CategoriaResponseDTO, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.CategoriaController",
+    "Method": "createCategory",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novaCategoriaDTO",
+        "Type": "PromocaoCsharp.DTO.CategoriaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.Models.Categoria",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.CategoriaController",
+    "Method": "GetCategoria",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.Models.Categoria",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.CategoriaController",
+    "Method": "updateCategory",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "categoriaAtualizadaDTO",
+        "Type": "PromocaoCsharp.DTO.CategoriaEditDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.Models.Categoria",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.CategoriaController",
+    "Method": "DeleteCategory",
+    "RelativePath": "api/Categoria/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
     "Method": "getProducts",
     "RelativePath": "api/Produto",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "ordenar",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.Models.Produto, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -48,14 +179,45 @@
   {
     "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
     "Method": "DetalhesProduto",
-    "RelativePath": "api/Produto/detalhes/{id}",
+    "RelativePath": "api/Produto/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.String",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.DTO.ProdutoComPromocaoDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
+    "Method": "AtualizarProduto",
+    "RelativePath": "api/Produto/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "produtoAtualizadoDTO",
+        "Type": "PromocaoCsharp.DTO.ProdutoEditDTO",
         "IsRequired": true
       }
     ],
@@ -73,43 +235,19 @@
   },
   {
     "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
-    "Method": "OrderByName",
-    "RelativePath": "api/Produto/ordenar/nome",
-    "HttpMethod": "GET",
+    "Method": "DeletarProduto",
+    "RelativePath": "api/Produto/{id}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.Models.Produto, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
-    ]
-  },
-  {
-    "ContainingType": "PromocaoCsharp.Controllers.ProdutoController",
-    "Method": "OrderByPrice",
-    "RelativePath": "api/Produto/ordenar/preco",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.Models.Produto, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "PromocaoCsharp.Controllers.PromocaoController",
@@ -121,7 +259,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.Models.Promocao, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[PromocaoCsharp.DTO.PromocaoResponseDTO, PromocaoCsharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -147,7 +285,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "PromocaoCsharp.Models.Promocao",
+        "Type": "PromocaoCsharp.DTO.PromocaoResponseDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -156,5 +294,78 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.PromocaoController",
+    "Method": "GetPromotionById",
+    "RelativePath": "api/Promocao/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.DTO.PromocaoResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.PromocaoController",
+    "Method": "UpdatePromotion",
+    "RelativePath": "api/Promocao/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "promocaoAtualizadaDTO",
+        "Type": "PromocaoCsharp.DTO.PromocaoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromocaoCsharp.DTO.PromocaoResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromocaoCsharp.Controllers.PromocaoController",
+    "Method": "DeletePromotion",
+    "RelativePath": "api/Promocao/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

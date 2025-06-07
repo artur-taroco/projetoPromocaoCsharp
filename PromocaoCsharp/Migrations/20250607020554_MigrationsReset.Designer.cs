@@ -12,8 +12,8 @@ using PromocaoCsharp.Models;
 namespace PromocaoCsharp.Migrations
 {
     [DbContext(typeof(PromocaoDbContext))]
-    [Migration("20250602024308_Migração reset")]
-    partial class Migraçãoreset
+    [Migration("20250607020554_MigrationsReset")]
+    partial class MigrationsReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,8 +29,8 @@ namespace PromocaoCsharp.Migrations
 
             modelBuilder.Entity("ProdutoPromocao", b =>
                 {
-                    b.Property<string>("ProdutosId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("ProdutosId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PromocoesId")
                         .HasColumnType("int");
@@ -42,13 +42,52 @@ namespace PromocaoCsharp.Migrations
                     b.ToTable("ProdutoPromocao");
                 });
 
-            modelBuilder.Entity("PromocaoCsharp.Models.Produto", b =>
+            modelBuilder.Entity("PromocaoCsharp.Models.Categoria", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("PromocaoCsharp.Models.Produto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Estoque")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Imagens")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -60,6 +99,8 @@ namespace PromocaoCsharp.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
 
                     b.ToTable("Produtos");
                 });
@@ -99,6 +140,20 @@ namespace PromocaoCsharp.Migrations
                         .HasForeignKey("PromocoesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PromocaoCsharp.Models.Produto", b =>
+                {
+                    b.HasOne("PromocaoCsharp.Models.Categoria", null)
+                        .WithMany("Produtos")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PromocaoCsharp.Models.Categoria", b =>
+                {
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

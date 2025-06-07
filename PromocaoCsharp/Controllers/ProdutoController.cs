@@ -17,16 +17,56 @@ namespace PromocaoCsharp.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Produto>> getProducts()
+        private ProdutoComPromocaoDTO MapProdutoToResponseDTO(Produto produto)
         {
-            return Ok(dbContext.Produtos);
+            return new ProdutoComPromocaoDTO(
+                produto.Id,
+                produto.Nome,
+                produto.Descricao,
+                produto.Preco,
+                produto.Estoque,
+                produto.CategoriaId,
+                produto.Imagens,
+                produto.Promocoes.Select(promocao => new PromocoesAtivasDTO(
+                    promocao.Id,
+                    promocao.PercentualDesconto,
+                    promocao.DataInicio,
+                    promocao.DataFim
+                )).ToList());
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Produto>> getProducts([FromQuery] string? ordenar)
+        {
+            IQueryable<Produto> produtos = dbContext.Produtos.Include(p => p.Promocoes).AsQueryable();
+
+            if (!string.IsNullOrEmpty(ordenar))
+            {
+                switch (ordenar.ToLower())
+                {
+                    case "nome":
+                        produtos = produtos.OrderBy(p => p.Nome);
+                        break;
+                    case "preco":
+                        produtos = produtos.OrderBy(p => p.Preco);
+                        break;
+                }
+            }
+
+            List<ProdutoComPromocaoDTO> resposta = produtos.Select(produto => MapProdutoToResponseDTO(produto)).ToList();
+            return Ok(resposta);
         }
 
         [HttpPost]
         public ActionResult<Produto> createProduct(ProdutoDTO novoProdutoDTO)
         {
-            Produto novoProduto = new Produto(novoProdutoDTO.Nome, novoProdutoDTO.Descricao, novoProdutoDTO.Preco);
+            bool categoria = dbContext.Categorias.Any(c => c.Id == novoProdutoDTO.CategoriaId);
+            if (!categoria)
+            {
+                return BadRequest("Categoria não encontrada");
+            }
+
+            Produto novoProduto = new Produto(novoProdutoDTO.Nome, novoProdutoDTO.Descricao, novoProdutoDTO.Preco, novoProdutoDTO.Estoque, novoProdutoDTO.CategoriaId, novoProdutoDTO.Imagens);
 
             dbContext.Produtos.Add(novoProduto);
             dbContext.SaveChanges();
@@ -34,21 +74,60 @@ namespace PromocaoCsharp.Controllers
             return CreatedAtAction(nameof(createProduct), novoProduto);
         }
 
-        [HttpGet("ordenar/nome")]
-        public ActionResult<IEnumerable<Produto>> OrderByName()
+        [HttpGet("{id}")]
+        public ActionResult<ProdutoComPromocaoDTO> DetalhesProduto(int id)
         {
-            return Ok(dbContext.Produtos.OrderBy(p => p.Nome));
+            Produto? produto = dbContext.Produtos.Include(p => p.Promocoes).FirstOrDefault(p => p.Id == id); 
+
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            ProdutoComPromocaoDTO produtoDTO = MapProdutoToResponseDTO(produto);
+
+            return Ok(produtoDTO);
         }
 
-        [HttpGet("ordenar/preco")]
-        public ActionResult<IEnumerable<Produto>> OrderByPrice()
+        [HttpPut("{id}")]
+        public ActionResult<Produto> AtualizarProduto(int id, ProdutoEditDTO produtoAtualizadoDTO)
         {
-            return Ok(dbContext.Produtos.OrderBy(p => p.Preco));
+            Produto? produtoExistente = dbContext.Produtos.FirstOrDefault(p => p.Id == id);
+
+            if (produtoExistente == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(produtoAtualizadoDTO.Nome)) // Sem chaves pois irá executar apenas a próxima linha se for true
+                produtoExistente.Nome = produtoAtualizadoDTO.Nome;
+
+            if (!string.IsNullOrEmpty(produtoAtualizadoDTO.Descricao))
+                produtoExistente.Descricao = produtoAtualizadoDTO.Descricao;
+
+            if (produtoAtualizadoDTO.Preco.HasValue && produtoAtualizadoDTO.Preco > 0)
+                produtoExistente.Preco = produtoAtualizadoDTO.Preco.Value;
+
+            if (produtoAtualizadoDTO.Estoque.HasValue)
+                produtoExistente.Estoque = produtoAtualizadoDTO.Estoque.Value;
+
+            if (produtoAtualizadoDTO.CategoriaId.HasValue)
+            {
+                bool categoriaExiste = dbContext.Categorias.Any(c => c.Id == produtoAtualizadoDTO.CategoriaId.Value);
+                if (!categoriaExiste)
+                {
+                    return BadRequest("A categoria informada não existe.");
+                }
+                produtoExistente.CategoriaId = produtoAtualizadoDTO.CategoriaId.Value;
+            }
+
+            dbContext.SaveChanges();
+
+            return Ok(produtoExistente);
         }
 
-
-        [HttpGet("detalhes/{id}")]
-        public ActionResult<Produto> DetalhesProduto(string id)
+        [HttpDelete("{id}")]
+        public ActionResult DeletarProduto(int id)
         {
             Produto? produto = dbContext.Produtos.FirstOrDefault(p => p.Id == id);
 
@@ -57,7 +136,10 @@ namespace PromocaoCsharp.Controllers
                 return NotFound();
             }
 
-            return Ok(produto);
+            dbContext.Produtos.Remove(produto);
+            dbContext.SaveChanges();
+
+            return NoContent();
         }
     }
 }

@@ -16,35 +16,48 @@ namespace PromocaoCsharp.Controllers
         {
             this.dbContext = dbContext;
         }
+        private PromocaoResponseDTO MapPromocaoToResponseDTO(Promocao promocao)
+        {
+            return new PromocaoResponseDTO(
+                promocao.Id,
+                promocao.PercentualDesconto,
+                promocao.DataInicio,
+                promocao.DataFim,
+                promocao.Produtos.Select(produto => new ProdutoBasicoDTO(
+                    produto.Id,
+                    produto.Nome,
+                    produto.Preco
+                )).ToList()
+            );
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Promocao>> GetPromotions()
+        public ActionResult<IEnumerable<PromocaoResponseDTO>> GetPromotions()
         {
-            List<Promocao> promocoes = dbContext.Promocoes.Include(p => p.Produtos).ToList(); // visualiza as promoções com GET
+            List<Promocao> promocoes = dbContext.Promocoes.Include(p => p.Produtos).ToList();
 
-            List<PromocaoResponseDTO> resposta = new List<PromocaoResponseDTO>(); // Cria um DTO para inserir o DTO de produtos, impedindo a ref. ciclica
+            List<PromocaoResponseDTO> resposta = promocoes.Select(promocao => MapPromocaoToResponseDTO(promocao)).ToList();
 
-            foreach (Promocao promocao in promocoes)
+            return Ok(resposta);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<PromocaoResponseDTO> GetPromotionById(int id)
+        {
+            Promocao? promocao = dbContext.Promocoes.Include(p => p.Produtos).FirstOrDefault(p => p.Id == id);
+
+            if (promocao == null)
             {
-                List<ProdutoNaPromocaoDTO> produtosNaPromocao = new List<ProdutoNaPromocaoDTO>();
-
-                foreach (Produto produto in promocao.Produtos)
-                {
-                    ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO(produto.Id, produto.Nome, produto.Preco);
-
-                    produtosNaPromocao.Add(produtoDTO);
-                }
-
-                PromocaoResponseDTO promocaoDTO = new PromocaoResponseDTO(promocao.Id, promocao.PercentualDesconto, promocao.DataInicio, promocao.DataFim, produtosNaPromocao);
-
-                resposta.Add(promocaoDTO);
+                return NotFound();
             }
+
+            PromocaoResponseDTO resposta = MapPromocaoToResponseDTO(promocao);
 
             return Ok(resposta);
         }
 
         [HttpPost]
-        public ActionResult<Promocao> CreatePromotion(PromocaoDTO novaPromocaoDTO)
+        public ActionResult<PromocaoResponseDTO> CreatePromotion(PromocaoDTO novaPromocaoDTO)
         {
             List<Produto> produtos = dbContext.Produtos.Where(p => novaPromocaoDTO.IdProdutos.Contains(p.Id)).ToList();
 
@@ -53,18 +66,54 @@ namespace PromocaoCsharp.Controllers
             dbContext.Add(novaPromocao);
             dbContext.SaveChanges();
 
-            List<ProdutoNaPromocaoDTO> produtosDTO = new List<ProdutoNaPromocaoDTO>();
+            PromocaoResponseDTO resposta = MapPromocaoToResponseDTO(novaPromocao);
 
-            foreach (Produto produto in produtos)
+            return CreatedAtAction(nameof(CreatePromotion), resposta);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<PromocaoResponseDTO> UpdatePromotion(int id, PromocaoDTO promocaoAtualizadaDTO)
+        {
+            Promocao? promocaoExistente = dbContext.Promocoes.Include(p => p.Produtos).FirstOrDefault(p => p.Id == id);
+
+            if (promocaoExistente == null)
             {
-                ProdutoNaPromocaoDTO produtoDTO = new ProdutoNaPromocaoDTO(produto.Id, produto.Nome, produto.Preco);
-
-                produtosDTO.Add(produtoDTO);
+                return NotFound();
             }
 
-            PromocaoResponseDTO resposta = new PromocaoResponseDTO(novaPromocao.Id, novaPromocao.PercentualDesconto, novaPromocao.DataInicio, novaPromocao.DataFim, produtosDTO);
-            
-            return CreatedAtAction(nameof(CreatePromotion), resposta);
+            if (promocaoAtualizadaDTO.PercentualDesconto > 0)
+                promocaoExistente.PercentualDesconto = promocaoAtualizadaDTO.PercentualDesconto;
+
+            if (promocaoAtualizadaDTO.DataInicio != null)
+                promocaoExistente.DataInicio = promocaoAtualizadaDTO.DataInicio;
+
+            if (promocaoAtualizadaDTO.DataFim != null)
+                promocaoExistente.DataFim = promocaoAtualizadaDTO.DataFim;
+
+            List<Produto> produtos = dbContext.Produtos.Where(p => promocaoAtualizadaDTO.IdProdutos.Contains(p.Id)).ToList();
+            promocaoExistente.Produtos = produtos;
+
+            dbContext.SaveChanges();
+
+            PromocaoResponseDTO resposta = MapPromocaoToResponseDTO(promocaoExistente);
+
+            return Ok(resposta);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePromotion(int id)
+        {
+            Promocao? promocao = dbContext.Promocoes.FirstOrDefault(p => p.Id == id);
+
+            if (promocao == null)
+            {
+                return NotFound();
+            }
+
+            dbContext.Promocoes.Remove(promocao);
+            dbContext.SaveChanges();
+
+            return NoContent();
         }
     }
 }
